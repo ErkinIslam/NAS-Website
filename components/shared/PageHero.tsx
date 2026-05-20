@@ -29,9 +29,9 @@ export default function PageHero({
     <section
       className={cn(
         'bg-hero-pattern relative overflow-hidden',
-        size === 'sm' && 'pt-28 pb-14',
-        size === 'md' && 'pt-32 pb-20',
-        size === 'lg' && 'pt-36 pb-24',
+        size === 'sm' && 'pt-24 sm:pt-28 pb-10 sm:pb-12',
+        size === 'md' && 'pt-26 sm:pt-30 pb-12 sm:pb-16',
+        size === 'lg' && 'pt-28 sm:pt-32 pb-14 sm:pb-18',
         className
       )}
     >

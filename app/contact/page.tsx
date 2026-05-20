@@ -4,221 +4,272 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   Phone, Mail, MapPin, Clock, Instagram, Facebook,
-  CheckCircle2, Send, Calendar, ChevronRight,
-  MessageSquare, ArrowRight,
+  CheckCircle2, Send, Calendar, MessageSquare, ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 import PageHero from '@/components/shared/PageHero';
 
-const services = [
-  'Travel & Flight Booking',
-  'Vehicle Shipping',
-  'Box / Cargo Shipping',
-  'Visa Application',
-  'ESTA Application',
-  'E-Albania Application',
-  'Apostille Services',
-  'Document Translation',
-  'Immigration Petition',
-  'Green Card Renewal',
-  'NVC / DS-260',
-  'Other',
+const SERVICES = [
+  'Travel & Flight Booking', 'Vehicle Shipping', 'Box / Cargo Shipping',
+  'Visa Application', 'ESTA Application', 'E-Albania Application',
+  'Apostille Services', 'Document Translation', 'Immigration Petition',
+  'Green Card Renewal', 'NVC / DS-260', 'Other',
 ];
 
-const timeSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
+const TIMES = [
+  '9:00 AM','10:00 AM','11:00 AM','12:00 PM',
+  '1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM',
+];
+
+async function submitForm(payload: Record<string, string>) {
+  try {
+    const res = await fetch('/api/contact', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
 
 export default function ContactPage() {
-  const [contactForm, setContactForm] = useState({
-    name: '', email: '', phone: '', service: '', message: '',
-  });
-  const [contactSent, setContactSent] = useState(false);
+  const { t } = useLanguage();
+  const [tab, setTab] = useState<'message' | 'booking'>('message');
 
-  const [bookingForm, setBookingForm] = useState({
-    name: '', email: '', phone: '', service: '', date: '', time: '', notes: '',
-  });
-  const [bookingSent, setBookingSent] = useState(false);
+  const [cForm, setCForm] = useState({ name:'', email:'', phone:'', service:'', message:'' });
+  const [cSent, setCsSent] = useState(false);
+  const [cErr,  setCErr]  = useState(false);
 
-  const handleContact = (e: React.FormEvent) => {
+  const [bForm, setBForm] = useState({ name:'', email:'', phone:'', service:'', date:'', time:'', notes:'' });
+  const [bSent, setBSent] = useState(false);
+  const [bErr,  setBErr]  = useState(false);
+
+  const handleContact = async (e: React.FormEvent) => {
     e.preventDefault();
-    setContactSent(true);
+    const ok = await submitForm({ type: 'contact', ...cForm });
+    ok ? setCsSent(true) : setCErr(true);
   };
 
-  const handleBooking = (e: React.FormEvent) => {
+  const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    setBookingSent(true);
+    const ok = await submitForm({ type: 'booking', ...bForm });
+    ok ? setBSent(true) : setBErr(true);
   };
 
   return (
     <>
       <PageHero
-        label="Contact Us"
-        title="Get in Touch With Our Team"
-        subtitle="We're here to help with all your travel, shipping, and documentation needs. Reach out by phone, email, or visit our Brooklyn office."
+        label="Contact"
+        title="Get in Touch"
+        subtitle="We're ready to help with travel, shipping, documents, and more. Reach out by phone, WhatsApp, or the form below."
         breadcrumbs={[{ label: 'Contact' }]}
-        size="md"
+        size="sm"
       />
 
-      {/* ─── CONTACT INFO STRIP ─────────────────────────── */}
-      <section className="py-12 bg-white border-b border-slate-100">
+      {/* ─── CONTACT QUICK INFO ─────────────────────── */}
+      <section className="py-8 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              {
-                icon:  Phone,
-                title: 'Call Us',
-                lines: ['347-935-0935', '718-749-9641'],
-                href:  'tel:3479350935',
-              },
-              {
-                icon:  Mail,
-                title: 'Email Us',
-                lines: ['info@nycalb.com'],
-                href:  'mailto:info@nycalb.com',
-              },
-              {
-                icon:  MapPin,
-                title: 'Visit Us',
-                lines: ['6802 15th Ave', 'Brooklyn, NY'],
-                href:  'https://maps.google.com/?q=6802+15th+Ave,+Brooklyn,+NY',
-              },
-              {
-                icon:  Clock,
-                title: 'Office Hours',
-                lines: ['Mon–Sat: 9 AM – 7 PM', 'Sun: By Appointment'],
-                href:  undefined,
-              },
-            ].map(({ icon: Icon, title, lines, href }) => (
+              { icon: Phone,  label: '347-935-0935',          sub: '718-749-9641',          href: 'tel:3479350935' },
+              { icon: Mail,   label: 'info@nycalb.com',       sub: 'Same-day response',     href: 'mailto:info@nycalb.com' },
+              { icon: MapPin, label: '6802 15th Ave',         sub: 'Brooklyn, NY',          href: 'https://maps.google.com/?q=6802+15th+Ave,+Brooklyn,+NY' },
+              { icon: Clock,  label: 'Mon–Sat 9AM–7PM',      sub: 'Sunday by appt.',       href: undefined },
+            ].map(({ icon: Icon, label, sub, href }) => (
               <a
-                key={title}
+                key={label}
                 href={href}
                 target={href?.startsWith('http') ? '_blank' : undefined}
                 rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className={`flex items-start gap-4 p-5 bg-slate-50 rounded-xl border border-slate-200 group transition-all duration-200 ${href ? 'hover:shadow-md hover:border-brand-red/30 cursor-pointer' : ''}`}
+                className={cn(
+                  'flex flex-col items-start p-4 rounded-xl border border-slate-200 bg-slate-50 gap-1.5',
+                  href && 'hover:border-brand-red/40 hover:shadow-sm transition-all cursor-pointer'
+                )}
               >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${href ? 'bg-red-50 group-hover:bg-brand-red' : 'bg-red-50'}`}>
-                  <Icon className={`w-5 h-5 transition-colors ${href ? 'text-brand-red group-hover:text-white' : 'text-brand-red'}`} />
-                </div>
-                <div>
-                  <p className="font-semibold text-navy-900 text-sm mb-1">{title}</p>
-                  {lines.map(line => (
-                    <p key={line} className="text-slate-500 text-sm">{line}</p>
-                  ))}
-                </div>
+                <Icon className="w-4 h-4 text-brand-red" />
+                <p className="font-semibold text-navy-900 text-sm leading-tight">{label}</p>
+                <p className="text-slate-400 text-xs">{sub}</p>
               </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── CONTACT FORM + MAP ─────────────────────────── */}
-      <section className="py-20 bg-slate-50">
+      {/* ─── MAIN CONTENT ───────────────────────────── */}
+      <section className="py-14 sm:py-16 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div>
-              <div className="section-label">
-                <span className="w-6 h-0.5 bg-brand-red" />
-                Send Us a Message
-              </div>
-              <h2 className="section-title mb-4">How Can We Help You?</h2>
-              <p className="text-slate-500 mb-8">
-                Fill out the form and a member of our team will respond within the same business day.
-              </p>
+          <div className="grid lg:grid-cols-5 gap-10">
 
-              <div className="bg-white border border-slate-200 rounded-2xl p-7 shadow-sm">
-                {contactSent ? (
-                  <div className="text-center py-8">
-                    <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle2 className="w-7 h-7 text-green-600" />
-                    </div>
-                    <h3 className="text-lg font-bold text-navy-900 mb-2">Message Received!</h3>
-                    <p className="text-slate-500 mb-5">We'll get back to you within the same business day.</p>
-                    <Button onClick={() => setContactSent(false)} variant="outline" size="md">
-                      Send Another Message
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleContact} className="space-y-4">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <Label htmlFor="c-name">Full Name *</Label>
-                        <Input id="c-name" placeholder="Your name" required
-                          value={contactForm.name}
-                          onChange={e => setContactForm(f => ({ ...f, name: e.target.value }))} />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="c-phone">Phone *</Label>
-                        <Input id="c-phone" type="tel" placeholder="(347) 000-0000" required
-                          value={contactForm.phone}
-                          onChange={e => setContactForm(f => ({ ...f, phone: e.target.value }))} />
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="c-email">Email</Label>
-                      <Input id="c-email" type="email" placeholder="you@example.com"
-                        value={contactForm.email}
-                        onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))} />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="c-service">Service of Interest</Label>
-                      <select id="c-service"
-                        className="form-input appearance-none"
-                        value={contactForm.service}
-                        onChange={e => setContactForm(f => ({ ...f, service: e.target.value }))}>
-                        <option value="">Select a service...</option>
-                        {services.map(s => <option key={s}>{s}</option>)}
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="c-message">Message *</Label>
-                      <Textarea id="c-message" placeholder="Tell us how we can help you..." required
-                        value={contactForm.message}
-                        onChange={e => setContactForm(f => ({ ...f, message: e.target.value }))} />
-                    </div>
-                    <Button type="submit" size="lg" variant="default" className="w-full">
-                      <Send className="w-4 h-4" />
-                      Send Message
-                    </Button>
-                  </form>
-                )}
+            {/* Left: Tab form panel */}
+            <div className="lg:col-span-3">
+              {/* Tabs */}
+              <div className="flex rounded-xl border border-slate-200 bg-white p-1 mb-6 shadow-sm">
+                <button
+                  onClick={() => setTab('message')}
+                  className={cn(
+                    'flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200',
+                    tab === 'message'
+                      ? 'bg-navy-900 text-white shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                  )}
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  {t('contact.tab.message')}
+                </button>
+                <button
+                  onClick={() => setTab('booking')}
+                  className={cn(
+                    'flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200',
+                    tab === 'booking'
+                      ? 'bg-navy-900 text-white shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                  )}
+                >
+                  <Calendar className="w-4 h-4" />
+                  {t('contact.tab.book')}
+                </button>
               </div>
 
-              {/* Social */}
-              <div className="mt-6 flex items-center gap-3">
-                <span className="text-slate-400 text-sm">Follow us:</span>
-                <a href="https://www.instagram.com/nycalbservices/" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-brand-red transition-colors">
-                  <Instagram className="w-4 h-4" /> Instagram
-                </a>
-                <a href="https://www.facebook.com/NYCALBSERVICES" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-brand-red transition-colors">
-                  <Facebook className="w-4 h-4" /> Facebook
-                </a>
-              </div>
+              {/* Message form */}
+              {tab === 'message' && (
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                  {cSent ? (
+                    <div className="text-center py-8">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                        <CheckCircle2 className="w-6 h-6 text-green-600" />
+                      </div>
+                      <h3 className="font-bold text-navy-900 mb-1">{t('contact.sent.title')}</h3>
+                      <p className="text-slate-500 text-sm mb-4">{t('contact.sent.sub')}</p>
+                      <Button onClick={() => setCsSent(false)} variant="outline" size="sm">{t('contact.another')}</Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleContact} className="space-y-4">
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="cm-name">{t('contact.name')} *</Label>
+                          <Input id="cm-name" required placeholder="Your name"
+                            value={cForm.name} onChange={e => setCForm(f => ({ ...f, name: e.target.value }))} />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="cm-phone">{t('contact.phone')} *</Label>
+                          <Input id="cm-phone" type="tel" required placeholder="(347) 000-0000"
+                            value={cForm.phone} onChange={e => setCForm(f => ({ ...f, phone: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="cm-email">{t('contact.email')}</Label>
+                        <Input id="cm-email" type="email" placeholder="you@example.com"
+                          value={cForm.email} onChange={e => setCForm(f => ({ ...f, email: e.target.value }))} />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="cm-service">{t('contact.service')}</Label>
+                        <select id="cm-service" className="form-input appearance-none"
+                          value={cForm.service} onChange={e => setCForm(f => ({ ...f, service: e.target.value }))}>
+                          <option value="">Select...</option>
+                          {SERVICES.map(s => <option key={s}>{s}</option>)}
+                        </select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="cm-msg">{t('contact.message')} *</Label>
+                        <Textarea id="cm-msg" required placeholder="How can we help you?"
+                          value={cForm.message} onChange={e => setCForm(f => ({ ...f, message: e.target.value }))} />
+                      </div>
+                      {cErr && <p className="text-red-500 text-sm">Something went wrong. Please call us directly.</p>}
+                      <Button type="submit" size="lg" variant="default" className="w-full">
+                        <Send className="w-4 h-4" /> {t('contact.submit.contact' as any) ?? t('cta.send')}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              )}
+
+              {/* Booking form */}
+              {tab === 'booking' && (
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                  {bSent ? (
+                    <div className="text-center py-8">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                        <Calendar className="w-6 h-6 text-green-600" />
+                      </div>
+                      <h3 className="font-bold text-navy-900 mb-1">{t('contact.booked.title')}</h3>
+                      <p className="text-slate-500 text-sm mb-4">{t('contact.booked.sub')}</p>
+                      <Button onClick={() => setBSent(false)} variant="outline" size="sm">{t('contact.another')}</Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleBooking} className="space-y-4">
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="bk-name">{t('contact.name')} *</Label>
+                          <Input id="bk-name" required placeholder="Your name"
+                            value={bForm.name} onChange={e => setBForm(f => ({ ...f, name: e.target.value }))} />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="bk-phone">{t('contact.phone')} *</Label>
+                          <Input id="bk-phone" type="tel" required placeholder="(347) 000-0000"
+                            value={bForm.phone} onChange={e => setBForm(f => ({ ...f, phone: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="bk-email">{t('contact.email')}</Label>
+                        <Input id="bk-email" type="email" placeholder="you@example.com"
+                          value={bForm.email} onChange={e => setBForm(f => ({ ...f, email: e.target.value }))} />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="bk-service">{t('contact.service')} *</Label>
+                        <select id="bk-service" required className="form-input appearance-none"
+                          value={bForm.service} onChange={e => setBForm(f => ({ ...f, service: e.target.value }))}>
+                          <option value="">Select...</option>
+                          {SERVICES.map(s => <option key={s}>{s}</option>)}
+                        </select>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="bk-date">{t('contact.date')} *</Label>
+                          <Input id="bk-date" type="date" required
+                            min={new Date().toISOString().split('T')[0]}
+                            value={bForm.date} onChange={e => setBForm(f => ({ ...f, date: e.target.value }))} />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="bk-time">{t('contact.time')} *</Label>
+                          <select id="bk-time" required className="form-input appearance-none"
+                            value={bForm.time} onChange={e => setBForm(f => ({ ...f, time: e.target.value }))}>
+                            <option value="">Select...</option>
+                            {TIMES.map(t => <option key={t}>{t}</option>)}
+                          </select>
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="bk-notes">{t('contact.notes')}</Label>
+                        <Textarea id="bk-notes" placeholder="Anything we should know..."
+                          value={bForm.notes} onChange={e => setBForm(f => ({ ...f, notes: e.target.value }))} />
+                      </div>
+                      {bErr && <p className="text-red-500 text-sm">Something went wrong. Please call us to book.</p>}
+                      <Button type="submit" size="lg" variant="default" className="w-full">
+                        <Calendar className="w-4 h-4" /> {t('contact.submit.booking' as any) ?? t('cta.book')}
+                      </Button>
+                      <p className="text-xs text-slate-400 text-center">{t('contact.booked.sub')}</p>
+                    </form>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Map */}
-            <div id="map" className="flex flex-col gap-6">
-              <div>
-                <div className="section-label">
-                  <span className="w-6 h-0.5 bg-brand-red" />
-                  Our Location
-                </div>
-                <h2 className="section-title mb-2">6802 15th Ave, Brooklyn</h2>
-                <p className="text-slate-500 mb-5">We're conveniently located in the heart of Brooklyn, easily accessible by car or public transportation.</p>
-              </div>
-
-              <div className="map-container rounded-2xl overflow-hidden border border-slate-200 shadow-sm flex-1 min-h-[320px]">
+            {/* Right: map + social + quick contact */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+              {/* Map */}
+              <div id="map" className="map-container rounded-2xl overflow-hidden border border-slate-200 shadow-sm flex-1 min-h-[280px]">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3028.684!2d-74.0059!3d40.6189!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24414e9b4f921%3A0x0!2s6802+15th+Ave%2C+Brooklyn%2C+NY+11228!5e0!3m2!1sen!2sus!4v1"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, minHeight: '320px' }}
-                  allowFullScreen
-                  loading="lazy"
+                  width="100%" height="100%"
+                  style={{ border: 0, minHeight: '280px' }}
+                  allowFullScreen loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="NYC Alb Services Office"
                 />
@@ -226,145 +277,47 @@ export default function ContactPage() {
 
               <a
                 href="https://maps.google.com/?q=6802+15th+Ave,+Brooklyn,+NY"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-brand-red text-sm font-semibold hover:underline"
               >
-                <MapPin className="w-4 h-4" />
-                Get Directions in Google Maps
-                <ArrowRight className="w-4 h-4" />
+                <MapPin className="w-4 h-4" /> {t('cta.directions')} <ArrowRight className="w-4 h-4" />
               </a>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ─── APPOINTMENT BOOKING ────────────────────────── */}
-      <section id="booking" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Info */}
-            <div>
-              <div className="section-label">
-                <span className="w-6 h-0.5 bg-brand-red" />
-                Appointments
-              </div>
-              <h2 className="section-title mb-4">Schedule a Consultation</h2>
-              <p className="text-slate-500 text-base leading-relaxed mb-8">
-                Book a one-on-one consultation with our team. Whether you need help with shipping, documents, travel, or apostille — we'll guide you through the process in detail.
-              </p>
-
-              <div className="space-y-4 mb-8">
-                {[
-                  { icon: Clock,        text: 'Consultations are 30–60 minutes' },
-                  { icon: MessageSquare, text: 'In-person or over the phone' },
-                  { icon: CheckCircle2, text: 'Free initial consultation' },
-                  { icon: Calendar,     text: 'Mon–Sat, 9 AM – 6 PM' },
-                ].map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-4 h-4 text-brand-red" />
-                    </div>
-                    <span className="text-slate-600 text-sm">{text}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-navy-900 rounded-xl p-6 text-white">
-                <p className="font-semibold text-sm mb-2">Prefer to Book by Phone?</p>
-                <a href="tel:3479350935" className="text-brand-red font-bold text-xl hover:text-red-400 transition-colors block mb-1">
-                  347-935-0935
-                </a>
-                <a href="tel:7187499641" className="text-brand-red font-bold text-xl hover:text-red-400 transition-colors block">
-                  718-749-9641
-                </a>
-                <p className="text-slate-400 text-xs mt-2">Available Mon–Sat, 9 AM – 7 PM</p>
-              </div>
-            </div>
-
-            {/* Booking Form */}
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-sm">
-              {bookingSent ? (
-                <div className="text-center py-8">
-                  <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="w-7 h-7 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-navy-900 mb-2">Appointment Requested!</h3>
-                  <p className="text-slate-500 mb-2">We'll confirm your appointment within 24 hours.</p>
-                  <p className="text-slate-400 text-sm mb-5">You'll receive a confirmation call or email.</p>
-                  <Button onClick={() => setBookingSent(false)} variant="outline" size="md">
-                    Request Another Appointment
-                  </Button>
+              {/* Quick contact box */}
+              <div className="bg-navy-900 rounded-2xl p-5 text-white">
+                <p className="font-semibold mb-3 text-sm">Direct Contact</p>
+                <div className="space-y-2.5">
+                  <a href="tel:3479350935" className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors text-sm">
+                    <Phone className="w-4 h-4 text-brand-red flex-shrink-0" /> 347-935-0935
+                  </a>
+                  <a href="tel:7187499641" className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors text-sm">
+                    <Phone className="w-4 h-4 text-brand-red flex-shrink-0" /> 718-749-9641
+                  </a>
+                  <a href="mailto:info@nycalb.com" className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors text-sm">
+                    <Mail className="w-4 h-4 text-brand-red flex-shrink-0" /> info@nycalb.com
+                  </a>
+                  <a
+                    href="https://wa.me/13479350935"
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors text-sm"
+                  >
+                    <svg className="w-4 h-4 text-[#25D366] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    WhatsApp Us
+                  </a>
                 </div>
-              ) : (
-                <form onSubmit={handleBooking} className="space-y-4">
-                  <div className="flex items-center gap-2 mb-5">
-                    <Calendar className="w-5 h-5 text-brand-red" />
-                    <h3 className="font-bold text-navy-900 text-lg">Book an Appointment</h3>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="b-name">Full Name *</Label>
-                      <Input id="b-name" placeholder="Your name" required
-                        value={bookingForm.name}
-                        onChange={e => setBookingForm(f => ({ ...f, name: e.target.value }))} />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="b-phone">Phone *</Label>
-                      <Input id="b-phone" type="tel" placeholder="(347) 000-0000" required
-                        value={bookingForm.phone}
-                        onChange={e => setBookingForm(f => ({ ...f, phone: e.target.value }))} />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="b-email">Email</Label>
-                    <Input id="b-email" type="email" placeholder="you@example.com"
-                      value={bookingForm.email}
-                      onChange={e => setBookingForm(f => ({ ...f, email: e.target.value }))} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="b-service">Service *</Label>
-                    <select id="b-service" required className="form-input appearance-none"
-                      value={bookingForm.service}
-                      onChange={e => setBookingForm(f => ({ ...f, service: e.target.value }))}>
-                      <option value="">Select a service...</option>
-                      {services.map(s => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="b-date">Preferred Date *</Label>
-                      <Input id="b-date" type="date" required
-                        min={new Date().toISOString().split('T')[0]}
-                        value={bookingForm.date}
-                        onChange={e => setBookingForm(f => ({ ...f, date: e.target.value }))} />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="b-time">Preferred Time *</Label>
-                      <select id="b-time" required className="form-input appearance-none"
-                        value={bookingForm.time}
-                        onChange={e => setBookingForm(f => ({ ...f, time: e.target.value }))}>
-                        <option value="">Select time...</option>
-                        {timeSlots.map(t => <option key={t}>{t}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="b-notes">Additional Notes</Label>
-                    <Textarea id="b-notes" placeholder="Anything we should know before your appointment..."
-                      value={bookingForm.notes}
-                      onChange={e => setBookingForm(f => ({ ...f, notes: e.target.value }))} />
-                  </div>
-                  <Button type="submit" size="lg" variant="default" className="w-full">
-                    <Calendar className="w-4 h-4" />
-                    Request Appointment
-                  </Button>
-                  <p className="text-xs text-slate-400 text-center">
-                    We'll confirm your appointment within 24 hours by phone or email.
-                  </p>
-                </form>
-              )}
+                <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-white/10">
+                  <a href="https://www.instagram.com/nycalbservices/" target="_blank" rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-red flex items-center justify-center transition-colors">
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                  <a href="https://www.facebook.com/NYCALBSERVICES" target="_blank" rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-red flex items-center justify-center transition-colors">
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

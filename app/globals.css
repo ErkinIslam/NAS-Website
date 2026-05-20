@@ -55,10 +55,10 @@
     @apply inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-brand-red mb-3;
   }
   .section-title {
-    @apply text-3xl sm:text-4xl font-bold text-navy-900 leading-tight;
+    @apply text-2xl sm:text-3xl font-bold text-navy-900 leading-tight;
   }
   .section-subtitle {
-    @apply text-base sm:text-lg text-slate-500 max-w-2xl;
+    @apply text-sm sm:text-base text-slate-500 max-w-2xl;
   }
   .card-hover {
     @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
@@ -128,4 +128,22 @@
 /* Map iframe */
 .map-container iframe {
   filter: grayscale(15%) contrast(1.05);
+}
+
+/* Responsive: ensure hero always has correct top offset */
+@media (max-width: 639px) {
+  /* On mobile the navbar is 14+8=~56px (no top utility bar) */
+  .hero-top-offset { padding-top: 4rem; }
+}
+
+/* Prevent tap highlight on interactive elements */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* Smooth select appearance */
+select.form-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em;
+  padding-right: 2.5rem;
 }
