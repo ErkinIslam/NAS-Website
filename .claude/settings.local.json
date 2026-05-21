@@ -13,7 +13,9 @@
       "Read(//Users/erkinislam/Desktop/**)",
       "Bash(zip -r nas-website-v3.zip nas-website-v3 --exclude \"nas-website-v3/node_modules/*\" --exclude \"nas-website-v3/.next/*\" --exclude \"nas-website-v3/.git/*\")",
       "Bash(npm show *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(npm list *)",
+      "Bash(npm uninstall *)"
     ]
   }
 }
