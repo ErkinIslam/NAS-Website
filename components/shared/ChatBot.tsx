@@ -154,7 +154,7 @@ export default function ChatBot() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[340px] sm:w-[380px] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden chat-bubble-enter">
+        <div className="fixed bottom-40 right-6 z-50 w-[340px] sm:w-[380px] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden chat-bubble-enter">
 
           {/* Header */}
           <div className="bg-navy-900 px-4 py-3.5 flex items-center gap-3">

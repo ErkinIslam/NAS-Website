@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-const TO_EMAIL = 'info@nycalb.com';
+const TO_EMAIL = 'erkinislam.utility@gmail.com'; // TODO: change to info@nycalb.com before final launch
 
 function escapeHtml(str: unknown): string {
   if (str === null || str === undefined) return '—';
