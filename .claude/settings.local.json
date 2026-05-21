@@ -15,7 +15,10 @@
       "Bash(npm show *)",
       "Bash(node -e ' *)",
       "Bash(npm list *)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(npm --version)",
+      "Bash(npm ls *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); matches=[f for f in d.get\\('files',[]\\) if 'source-map' in f]; print\\(f'source-map entries in trace: {len\\(matches\\)}'\\); [print\\(' ',m\\) for m in matches[:5]]\")"
     ]
   }
 }
