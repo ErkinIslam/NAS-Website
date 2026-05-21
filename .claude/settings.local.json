@@ -3,7 +3,12 @@
     "allow": [
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(npm audit *)",
+      "Bash(# Check all possible logo locations *)",
+      "Bash(node -e \"const p = require\\('./node_modules/nodemailer/package.json'\\); console.log\\('nodemailer:', p.version\\)\")",
+      "Bash(zip -r \"/Users/erkinislam/Desktop/nas-website-v3.zip\" . -x \"node_modules/*\" \".next/*\" \".git/*\" \"*.DS_Store\")"
     ]
   }
 }
