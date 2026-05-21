@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   Ship, Car, Package, Phone, ArrowRight, CheckCircle2,
-  Clock, Shield, Plane, Scale, Info, Calendar,
+  Clock, Shield, Plane, Scale, Info,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -147,7 +147,7 @@ export default function ShippingPage() {
   const { lang } = useLanguage();
   const c = lang === 'sq' ? SQ : EN;
 
-  const [form, setForm]       = useState({ name:'', email:'', phone:'', shipmentType:'', origin:'', destination:'', details:'' });
+  const [form, setForm]       = useState({ name:'', email:'', phone:'', shipmentType:'', origin:'', destination:'', details:'', _honey:'' });
   const [submitted, setSubmitted] = useState(false);
   const [error,     setError]     = useState(false);
 
@@ -210,7 +210,7 @@ export default function ShippingPage() {
             {VEHICLE_PRICING.map(({ type, price, from, popular, note }) => (
               <div
                 key={type}
-                className={`relative bg-white rounded-xl border p-5 flex flex-col hover:shadow-lg hover:-translate-y-1 transition-all ${popular ? 'border-brand-red shadow-md' : 'border-slate-200'}`}
+                className={`relative bg-white rounded-xl border p-5 flex flex-col items-center text-center sm:items-start sm:text-left hover:shadow-lg hover:-translate-y-1 transition-all ${popular ? 'border-brand-red shadow-md' : 'border-slate-200'}`}
               >
                 {popular && (
                   <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
@@ -251,8 +251,8 @@ export default function ShippingPage() {
             <table className="w-full">
               <thead>
                 <tr className="bg-navy-900 text-white">
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider">Shipment Type</th>
-                  <th className="text-right px-5 py-3 text-xs font-semibold uppercase tracking-wider">Price</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider">{lang === 'sq' ? 'Lloji i Dërgimit' : 'Shipment Type'}</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold uppercase tracking-wider">{lang === 'sq' ? 'Çmimi' : 'Price'}</th>
                 </tr>
               </thead>
               <tbody>
@@ -418,7 +418,18 @@ export default function ShippingPage() {
                     <Textarea id="q-details" placeholder={lang === 'sq' ? 'Viti/marka/modeli i automjetit, dimensionet e ngarkesës...' : 'Vehicle year/make/model, cargo dimensions...'}
                       value={form.details} onChange={e => setForm(f => ({ ...f, details: e.target.value }))} />
                   </div>
-                  {error && <p className="text-red-500 text-sm">{c.errorMsg}</p>}
+                  {/* Honeypot: hidden from real users, filled by bots */}
+                  <input
+                    type="text"
+                    name="_honey"
+                    value={form._honey}
+                    onChange={e => setForm(f => ({ ...f, _honey: e.target.value }))}
+                    style={{ display: 'none' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
+                  {error && <p className="text-red-500 text-sm" role="alert">{c.errorMsg}</p>}
                   <Button type="submit" size="lg" variant="default" className="w-full">
                     {c.formSubmit} <ArrowRight className="w-4 h-4" />
                   </Button>

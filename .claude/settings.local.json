@@ -8,7 +8,12 @@
       "Bash(npm audit *)",
       "Bash(# Check all possible logo locations *)",
       "Bash(node -e \"const p = require\\('./node_modules/nodemailer/package.json'\\); console.log\\('nodemailer:', p.version\\)\")",
-      "Bash(zip -r \"/Users/erkinislam/Desktop/nas-website-v3.zip\" . -x \"node_modules/*\" \".next/*\" \".git/*\" \"*.DS_Store\")"
+      "Bash(zip -r \"/Users/erkinislam/Desktop/nas-website-v3.zip\" . -x \"node_modules/*\" \".next/*\" \".git/*\" \"*.DS_Store\")",
+      "Bash(npx tsc *)",
+      "Read(//Users/erkinislam/Desktop/**)",
+      "Bash(zip -r nas-website-v3.zip nas-website-v3 --exclude \"nas-website-v3/node_modules/*\" --exclude \"nas-website-v3/.next/*\" --exclude \"nas-website-v3/.git/*\")",
+      "Bash(npm show *)",
+      "Bash(node -e ' *)"
     ]
   }
 }

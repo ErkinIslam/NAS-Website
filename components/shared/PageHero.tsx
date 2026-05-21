@@ -1,7 +1,10 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 
 interface Breadcrumb {
   label: string;
@@ -25,13 +28,14 @@ export default function PageHero({
   className,
   size = 'md',
 }: PageHeroProps) {
+  const { t } = useLanguage();
   return (
     <section
       className={cn(
         'bg-hero-pattern relative overflow-hidden',
         size === 'sm' && 'pt-24 sm:pt-28 pb-10 sm:pb-12',
-        size === 'md' && 'pt-26 sm:pt-30 pb-12 sm:pb-16',
-        size === 'lg' && 'pt-28 sm:pt-32 pb-14 sm:pb-18',
+        size === 'md' && 'pt-28 sm:pt-32 pb-12 sm:pb-16',
+        size === 'lg' && 'pt-32 sm:pt-36 pb-14 sm:pb-20',
         className
       )}
     >
@@ -46,7 +50,7 @@ export default function PageHero({
         {/* Breadcrumbs */}
         {breadcrumbs && (
           <nav className="flex items-center gap-1.5 mb-5 text-xs font-medium text-slate-400" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <Link href="/" className="hover:text-white transition-colors">{t('nav.home')}</Link>
             {breadcrumbs.map((crumb, i) => (
               <React.Fragment key={i}>
                 <ChevronRight className="w-3 h-3" />

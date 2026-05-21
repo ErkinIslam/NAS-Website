@@ -84,11 +84,13 @@ export default function Navbar() {
           {/* Right actions */}
           <div className="hidden xl:flex items-center gap-2 flex-shrink-0">
             {/* Language toggle */}
-            <div className="flex items-center border border-slate-200 rounded-full overflow-hidden text-xs font-semibold">
+            <div className="flex items-center border border-slate-200 rounded-full overflow-hidden text-xs font-semibold" role="group" aria-label="Language">
               {(['en', 'sq'] as Lang[]).map(l => (
                 <button
                   key={l}
                   onClick={() => setLang(l)}
+                  aria-label={l === 'en' ? 'Switch to English' : 'Kalo në Shqip'}
+                  aria-pressed={lang === l}
                   className={cn(
                     'px-3 py-1.5 transition-colors duration-150',
                     lang === l
@@ -122,6 +124,24 @@ export default function Navbar() {
             </a>
           </div>
 
+          {/* Mobile: always-visible language toggle */}
+          <div className="xl:hidden flex items-center border border-slate-200 rounded-full overflow-hidden text-xs font-semibold" role="group" aria-label="Language">
+            {(['en', 'sq'] as Lang[]).map(l => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                aria-label={l === 'en' ? 'Switch to English' : 'Kalo në Shqip'}
+                aria-pressed={lang === l}
+                className={cn(
+                  'px-2.5 py-1 transition-colors duration-150',
+                  lang === l ? 'bg-navy-900 text-white' : 'text-slate-500 hover:text-slate-700'
+                )}
+              >
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
           {/* Mobile hamburger */}
           <button
             onClick={() => setOpen(!open)}
@@ -152,24 +172,7 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
-              <a
-                href="tel:7187499641"
-                className="flex items-center gap-2 text-sm text-slate-700 px-1"
-              >
-                <Phone className="w-4 h-4 text-brand-red" />
-                <span className="text-slate-400 text-xs">Office:</span> 718-749-9641
-              </a>
-              <a
-                href="tel:3479350935"
-                className="flex items-center gap-2 text-sm text-slate-700 px-1"
-              >
-                <Phone className="w-4 h-4 text-brand-red" />
-                <span className="text-slate-400 text-xs">Mobile / WhatsApp:</span> 347-935-0935
-              </a>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-100">
               <a
                 href="tel:3479350935"
                 className="flex items-center justify-center gap-1.5 text-sm font-semibold text-white bg-brand-red hover:bg-brand-red-hover px-4 py-2.5 rounded-lg transition-colors"
@@ -189,24 +192,6 @@ export default function Navbar() {
               </a>
             </div>
 
-            {/* Mobile language toggle */}
-            <div className="flex items-center gap-2 pt-2 pb-1">
-              <span className="text-xs text-slate-400 font-medium">Language:</span>
-              <div className="flex items-center border border-slate-200 rounded-full overflow-hidden text-xs font-semibold">
-                {(['en', 'sq'] as Lang[]).map(l => (
-                  <button
-                    key={l}
-                    onClick={() => setLang(l)}
-                    className={cn(
-                      'px-3 py-1 transition-colors',
-                      lang === l ? 'bg-navy-900 text-white' : 'text-slate-500 hover:bg-slate-50'
-                    )}
-                  >
-                    {l.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       )}

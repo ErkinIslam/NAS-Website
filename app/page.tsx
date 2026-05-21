@@ -179,7 +179,7 @@ export default function HomePage() {
               </div>
               <h2 className="section-title mb-3">{t('home.shipping.title')}</h2>
               <p className="text-slate-500 text-sm mb-6">
-                Ocean and air freight between the USA and Europe. Transparent pricing, trusted carriers.
+                {t('home.shipping.blurb' as any)}
               </p>
 
               <div className="space-y-2 mb-6">
@@ -210,8 +210,8 @@ export default function HomePage() {
 
             {/* Logistics partners */}
             <div className="bg-white rounded-2xl border border-slate-200 p-7 shadow-sm">
-              <h3 className="font-bold text-navy-900 mb-1">Trusted Logistics Partners</h3>
-              <p className="text-slate-500 text-sm mb-6">Globally recognized carriers for safe, timely delivery.</p>
+              <h3 className="font-bold text-navy-900 mb-1">{t('home.shipping.partners.title' as any)}</h3>
+              <p className="text-slate-500 text-sm mb-6">{t('home.shipping.partners.sub' as any)}</p>
               <div className="grid grid-cols-2 gap-3">
                 {PARTNERS.map(({ name, src }) => (
                   <div
@@ -229,7 +229,7 @@ export default function HomePage() {
                 ))}
               </div>
               <p className="text-slate-400 text-xs mt-4 text-center">
-                Pricing for other commodities depends on dimensions and weight.
+                {t('home.shipping.partners.note' as any)}
               </p>
             </div>
           </div>

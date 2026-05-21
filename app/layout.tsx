@@ -41,6 +41,7 @@ export const metadata: Metadata = {
     siteName:  'NYC Alb Services',
     title:     'NYC Alb Services | Travel, Shipping & Immigration',
     description: 'Trusted travel, shipping, and immigration services in Brooklyn, NY.',
+    images: [{ url: '/logo.png', width: 400, height: 168, alt: 'NYC Alb Services' }],
   },
   twitter: { card: 'summary_large_image', title: 'NYC Alb Services | Brooklyn, NY' },
   robots:  { index: true, follow: true },

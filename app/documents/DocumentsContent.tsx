@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import {
   Globe2, Shield, CheckCircle2, Phone,
-  ArrowRight, FileCheck, UserCheck,
+  ArrowRight, UserCheck,
   BookOpen, Languages, Calendar,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

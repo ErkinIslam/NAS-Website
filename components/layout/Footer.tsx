@@ -20,7 +20,7 @@ export default function Footer() {
   return (
     <footer className="bg-navy-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
 
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
@@ -31,14 +31,14 @@ export default function Footer() {
                   alt="NYC Alb Services"
                   fill
                   sizes="100px"
-                  className="object-contain object-left"
+                  className="object-contain object-center sm:object-left"
                 />
               </div>
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4 max-w-xs">
+            <p className="text-slate-400 text-sm leading-relaxed mb-4 max-w-xs mx-auto sm:mx-0">
               {t('footer.tagline')}
             </p>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 justify-center sm:justify-start">
               <a
                 href="https://www.instagram.com/nycalbservices/"
                 target="_blank" rel="noopener noreferrer"
@@ -70,7 +70,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.services' as any) ?? 'Services'}</h3>
+            <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.nav' as any)}</h3>
             <ul className="space-y-2">
               {navLinks.map(({ href, labelKey }) => (
                 <li key={href}>
@@ -87,22 +87,22 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.contact' as any) ?? 'Contact'}</h3>
+            <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.contact.label' as any)}</h3>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="tel:7187499641" className="flex items-start gap-2 hover:text-white transition-colors">
+                <a href="tel:7187499641" className="flex items-start gap-2 hover:text-white transition-colors justify-center sm:justify-start">
                   <Phone className="w-3.5 h-3.5 text-brand-red flex-shrink-0 mt-0.5" />
                   <span><span className="text-slate-500 text-xs">Office:</span><br />718-749-9641</span>
                 </a>
               </li>
               <li>
-                <a href="tel:3479350935" className="flex items-start gap-2 hover:text-white transition-colors">
+                <a href="tel:3479350935" className="flex items-start gap-2 hover:text-white transition-colors justify-center sm:justify-start">
                   <Phone className="w-3.5 h-3.5 text-brand-red flex-shrink-0 mt-0.5" />
                   <span><span className="text-slate-500 text-xs">Mobile / WhatsApp:</span><br />347-935-0935</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:info@nycalb.com" className="flex items-center gap-2 hover:text-white transition-colors">
+                <a href="mailto:info@nycalb.com" className="flex items-center gap-2 hover:text-white transition-colors justify-center sm:justify-start">
                   <Mail className="w-3.5 h-3.5 text-brand-red flex-shrink-0" /> info@nycalb.com
                 </a>
               </li>
@@ -110,7 +110,7 @@ export default function Footer() {
                 <a
                   href="https://maps.google.com/?q=6802+15th+Ave,+Brooklyn,+NY"
                   target="_blank" rel="noopener noreferrer"
-                  className="flex items-start gap-2 hover:text-white transition-colors"
+                  className="flex items-start gap-2 hover:text-white transition-colors justify-center sm:justify-start"
                 >
                   <MapPin className="w-3.5 h-3.5 text-brand-red flex-shrink-0 mt-0.5" />
                   6802 15th Ave, Brooklyn, NY
@@ -121,8 +121,8 @@ export default function Footer() {
 
           {/* Hours */}
           <div>
-            <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.hours' as any) ?? 'Hours'}</h3>
-            <div className="flex items-start gap-2 text-sm text-slate-400 mb-2">
+            <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.hours.label' as any)}</h3>
+            <div className="flex items-start gap-2 text-sm text-slate-400 mb-2 justify-center sm:justify-start">
               <Clock className="w-3.5 h-3.5 text-brand-red flex-shrink-0 mt-0.5" />
               <div>
                 <p>{t('footer.hours.weekday')}</p>

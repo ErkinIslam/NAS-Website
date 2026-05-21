@@ -86,6 +86,29 @@ const en = {
   'misc.byQuote': 'By Quote',
   'misc.custom': 'Custom',
   'misc.from': 'From',
+  // Footer section labels
+  'footer.nav': 'Services',
+  'footer.contact.label': 'Contact',
+  'footer.hours.label': 'Hours',
+  // Contact page hero
+  'contact.page.label': 'Contact',
+  'contact.page.title': 'Get in Touch',
+  'contact.page.sub': "We're ready to help with travel, shipping, documents, and more. Reach out by phone, WhatsApp, or the form below.",
+  // Contact quick info
+  'contact.response': 'Same-day response',
+  'contact.sunday.short': 'Sunday by appt.',
+  'contact.direct': 'Direct Contact',
+  // Shipping table headers
+  'shipping.table.type': 'Shipment Type',
+  'shipping.table.price': 'Price',
+  // Home shipping section
+  'home.shipping.blurb': 'Ocean and air freight between the USA and Europe. Transparent pricing, trusted carriers.',
+  'home.shipping.partners.title': 'Trusted Logistics Partners',
+  'home.shipping.partners.sub': 'Globally recognized carriers for safe, timely delivery.',
+  'home.shipping.partners.note': 'Pricing for other commodities depends on dimensions and weight.',
+  // Form errors (contact page)
+  'contact.error': 'Something went wrong. Please call us directly.',
+  'contact.error.booking': 'Something went wrong. Please call us to book.',
 };
 
 const sq: typeof en = {
@@ -168,6 +191,29 @@ const sq: typeof en = {
   'misc.byQuote': 'Me Ofertë',
   'misc.custom': 'Me Kërkesë',
   'misc.from': 'Nga',
+  // Footer section labels
+  'footer.nav': 'Shërbime',
+  'footer.contact.label': 'Kontakt',
+  'footer.hours.label': 'Orari',
+  // Contact page hero
+  'contact.page.label': 'Kontakt',
+  'contact.page.title': 'Na Kontaktoni',
+  'contact.page.sub': 'Jemi gati t\'ju ndihmojmë me udhëtim, transport, dokumente dhe më shumë. Na kontaktoni me telefon, WhatsApp ose formularin më poshtë.',
+  // Contact quick info
+  'contact.response': 'Përgjigje brenda ditës',
+  'contact.sunday.short': 'E Diel me caktim',
+  'contact.direct': 'Kontakt Direkt',
+  // Shipping table headers
+  'shipping.table.type': 'Lloji i Dërgimit',
+  'shipping.table.price': 'Çmimi',
+  // Home shipping section
+  'home.shipping.blurb': 'Fracht detar dhe ajror midis SHBA dhe Europës. Çmime transparente, transportues të besuar.',
+  'home.shipping.partners.title': 'Partnerë të Besueshëm Logjistikë',
+  'home.shipping.partners.sub': 'Transportues globalë të njohur për dorëzim të sigurt dhe në kohë.',
+  'home.shipping.partners.note': 'Çmimet për mallra të tjera varen nga dimensionet dhe pesha.',
+  // Form errors (contact page)
+  'contact.error': 'Dërgimi dështoi. Ju lutemi na telefononi drejtpërdrejt.',
+  'contact.error.booking': 'Dërgimi dështoi. Ju lutemi na telefononi për të rezervuar.',
 };
 
 const translations: Record<Lang, typeof en> = { en, sq };
@@ -193,6 +239,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem('nas-lang') as Lang | null;
     if (saved === 'en' || saved === 'sq') setLangState(saved);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
