@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Plane, Ship, FileText, Stamp, Phone, ArrowRight,
   CheckCircle2, Star, Clock, Shield, Globe2, Package, Car, Calendar,
@@ -10,10 +11,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/lib/i18n';
 
 const PARTNERS = [
-  { name: 'UPS',   bg: '#351C08', text: '#FFB500', accent: '#FFB500' },
-  { name: 'DHL',   bg: '#D40511', text: '#FFCC00', accent: '#FFCC00' },
-  { name: 'FedEx', bg: '#4D148C', text: '#FF6200', accent: '#FF6200' },
-  { name: 'USPS',  bg: '#004B87', text: '#FFFFFF', accent: '#DA291C' },
+  { name: 'UPS',   src: '/ups.png'   },
+  { name: 'DHL',   src: '/dhl.png'   },
+  { name: 'FedEx', src: '/fedex.jpg' },
+  { name: 'USPS',  src: '/usps.jpg'  },
 ];
 
 const TESTIMONIALS = [
@@ -111,16 +112,22 @@ export default function HomePage() {
                     </Link>
                   ))}
                 </div>
-                <a
-                  href="tel:3479350935"
-                  className="mt-5 flex items-center gap-3 bg-brand-red/10 border border-brand-red/20 rounded-xl p-3.5 hover:bg-brand-red/20 transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-brand-red flex-shrink-0" />
-                  <div>
-                    <p className="text-white text-xs font-medium leading-none mb-0.5">Call for immediate help</p>
-                    <p className="text-brand-red font-bold text-sm">347-935-0935</p>
-                  </div>
-                </a>
+                <div className="mt-5 bg-brand-red/10 border border-brand-red/20 rounded-xl p-3.5 space-y-2">
+                  <a href="tel:7187499641" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <Phone className="w-4 h-4 text-brand-red flex-shrink-0" />
+                    <div>
+                      <p className="text-slate-400 text-xs leading-none mb-0.5">Office</p>
+                      <p className="text-brand-red font-bold text-sm">718-749-9641</p>
+                    </div>
+                  </a>
+                  <a href="tel:3479350935" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <Phone className="w-4 h-4 text-brand-red flex-shrink-0" />
+                    <div>
+                      <p className="text-slate-400 text-xs leading-none mb-0.5">Mobile / WhatsApp</p>
+                      <p className="text-brand-red font-bold text-sm">347-935-0935</p>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -206,18 +213,18 @@ export default function HomePage() {
               <h3 className="font-bold text-navy-900 mb-1">Trusted Logistics Partners</h3>
               <p className="text-slate-500 text-sm mb-6">Globally recognized carriers for safe, timely delivery.</p>
               <div className="grid grid-cols-2 gap-3">
-                {PARTNERS.map(({ name, bg, text }) => (
+                {PARTNERS.map(({ name, src }) => (
                   <div
                     key={name}
-                    className="flex items-center justify-center rounded-xl h-16"
-                    style={{ backgroundColor: bg }}
+                    className="relative flex items-center justify-center rounded-xl h-16 bg-white border border-slate-100 overflow-hidden"
                   >
-                    <span
-                      className="font-black text-xl tracking-tight"
-                      style={{ color: text }}
-                    >
-                      {name}
-                    </span>
+                    <Image
+                      src={src}
+                      alt={name}
+                      fill
+                      sizes="160px"
+                      className="object-contain p-2"
+                    />
                   </div>
                 ))}
               </div>

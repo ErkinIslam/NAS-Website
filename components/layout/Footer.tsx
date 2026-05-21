@@ -90,13 +90,15 @@ export default function Footer() {
             <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-4">{t('footer.contact' as any) ?? 'Contact'}</h3>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="tel:3479350935" className="flex items-center gap-2 hover:text-white transition-colors">
-                  <Phone className="w-3.5 h-3.5 text-brand-red flex-shrink-0" /> 347-935-0935
+                <a href="tel:7187499641" className="flex items-start gap-2 hover:text-white transition-colors">
+                  <Phone className="w-3.5 h-3.5 text-brand-red flex-shrink-0 mt-0.5" />
+                  <span><span className="text-slate-500 text-xs">Office:</span><br />718-749-9641</span>
                 </a>
               </li>
               <li>
-                <a href="tel:7187499641" className="flex items-center gap-2 hover:text-white transition-colors">
-                  <Phone className="w-3.5 h-3.5 text-brand-red flex-shrink-0" /> 718-749-9641
+                <a href="tel:3479350935" className="flex items-start gap-2 hover:text-white transition-colors">
+                  <Phone className="w-3.5 h-3.5 text-brand-red flex-shrink-0 mt-0.5" />
+                  <span><span className="text-slate-500 text-xs">Mobile / WhatsApp:</span><br />347-935-0935</span>
                 </a>
               </li>
               <li>
