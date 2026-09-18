@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.5rem;
+  --font-inter: 'Inter', system-ui, sans-serif;
+
+  /* Brand */
+  --navy:       #0B1F3A;
+  --navy-mid:   #14305A;
+  --navy-light: #1e4080;
+  --red:        #C8102E;
+  --red-hover:  #a50e26;
+  --off-white:  #F8F9FC;
+  --border:     #e2e8f0;
+  --text-muted: #64748b;
+
+  /* Fixed navbar height, used to offset in-page anchor targets. */
+  --nav-h: 3.5rem;   /* 56px — mobile, no utility bar */
+}
+
+@media (min-width: 640px) {
+  :root { --nav-h: 5.5rem; } /* 88px — utility bar (32px) + main bar (56px) */
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+    /* Anchor targets land below the fixed header instead of underneath it. */
+    scroll-padding-top: calc(var(--nav-h) + 1rem);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-white text-slate-900 font-sans;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold tracking-tight;
+  }
+
+  /* Visible keyboard focus everywhere, including elements without an explicit
+     focus-visible class. Mouse users never see it. */
+  :focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 2px;
+  }
+
+  /* `main` is the skip-link target; focusing it must not draw a box. */
+  main:focus {
+    outline: none;
+  }
+
+  /*
+   * The `hidden` attribute must always win.
+   *
+   * The browser's own rule is `[hidden] { display: none }`, but any Tailwind
+   * display utility on the same element — `flex`, `grid`, `block` — is an
+   * author-stylesheet rule and therefore beats it. That silently left the chat
+   * panel (`hidden={!open}` alongside `flex`) permanently visible and
+   * impossible to close. Making it !important means `hidden` behaves the way
+   * every reader of the markup expects, everywhere.
+   */
+  [hidden] {
+    display: none !important;
+  }
+
+  /* Respect the OS "reduce motion" setting — smooth scrolling and transform
+     animations are a vestibular trigger. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24;
+  }
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-brand-red text-white font-semibold px-6 py-3 text-sm transition-all duration-200 hover:bg-brand-red-hover active:scale-95 shadow-sm;
+  }
+  .btn-outline-navy {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border-2 border-brand-navy text-brand-navy font-semibold px-6 py-3 text-sm transition-all duration-200 hover:bg-brand-navy hover:text-white active:scale-95;
+  }
+  .section-label {
+    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-brand-red mb-3;
+  }
+  .section-title {
+    @apply text-2xl sm:text-3xl font-bold text-navy-900 leading-tight;
+  }
+  .section-subtitle {
+    @apply text-sm sm:text-base text-slate-600 max-w-2xl;
+  }
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+  .pricing-card {
+    @apply bg-white rounded-xl border border-slate-200 p-6 flex flex-col gap-4 card-hover;
+  }
+  .form-input {
+    @apply w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-transparent transition-all duration-150;
+  }
+  /* Marks a required field's label without relying on the asterisk alone. */
+  .field-required::after {
+    content: ' *';
+    @apply text-brand-red font-bold;
+  }
+  .red-bar {
+    @apply w-12 h-1 bg-brand-red rounded-full mb-4;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .bg-navy-gradient {
+    background: linear-gradient(135deg, #0B1F3A 0%, #14305A 100%);
+  }
+  .bg-hero-pattern {
+    background-color: #0B1F3A;
+    background-image:
+      radial-gradient(ellipse at 80% 20%, rgba(30, 64, 128, 0.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 80%, rgba(200, 16, 46, 0.08) 0%, transparent 50%);
+  }
+  /* Offsets an in-page target by the fixed header, for browsers that need it
+     per-element rather than via scroll-padding-top. */
+  .anchor-offset {
+    scroll-margin-top: calc(var(--nav-h) + 1rem);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Chat widget */
+.chat-panel-enter {
+  animation: chat-panel-in 0.2s ease-out;
+}
+@keyframes chat-panel-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Map iframe */
+.map-container iframe {
+  filter: grayscale(12%) contrast(1.03);
+}
+
+/* Prevent the grey flash on tap for interactive elements. */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* Custom select chevron */
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em;
+  padding-right: 2.5rem;
+}

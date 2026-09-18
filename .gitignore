@@ -1,0 +1,39 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files — note these are also excluded from any archive you create.
+# When zipping this project to share it, exclude them explicitly:
+#   zip -r site.zip . -x "node_modules/*" ".next/*" ".git/*" ".env*" "*.DS_Store"
+# Never archive secrets alongside the source.
+.env
+.env*.local
+!.env.local.example
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
